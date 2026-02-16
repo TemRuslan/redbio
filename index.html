@@ -47,16 +47,56 @@
             box-shadow: 0 20px 60px -15px rgba(188, 71, 73, 0.18);
         }
 
-        .hover-scale:hover {
-            transform: scale(1.02);
-        }
+	        .hover-scale:hover {
+	            transform: scale(1.02);
+	        }
 
-        .blob {
-            position: fixed;
-            z-index: -1;
-            filter: blur(80px);
-            border-radius: 50%;
-            opacity: 0.3;
+	        /* Mobile menu (works even when header is injected after Tailwind CDN initializes) */
+	        #mobile-menu-overlay {
+	            display: none;
+	            position: fixed;
+	            inset: 0;
+	            background: rgba(0, 0, 0, 0.3);
+	            backdrop-filter: blur(8px);
+	            -webkit-backdrop-filter: blur(8px);
+	            z-index: 60;
+	        }
+
+	        #mobile-menu-overlay.is-open {
+	            display: block;
+	        }
+
+	        #mobile-menu-panel {
+	            position: fixed;
+	            top: 0;
+	            right: 0;
+	            width: min(84vw, 360px);
+	            max-height: calc(100vh - 16px);
+	            height: auto;
+	            overflow: auto;
+	            transform: translateX(110%);
+	            transition: transform 200ms ease-out;
+	            z-index: 70;
+	            border-bottom-left-radius: 28px;
+	        }
+
+	        #mobile-menu-panel.is-open {
+	            transform: translateX(0);
+	        }
+
+	        @media (min-width: 1024px) {
+	            #mobile-menu-overlay,
+	            #mobile-menu-panel {
+	                display: none !important;
+	            }
+	        }
+
+	        .blob {
+	            position: fixed;
+	            z-index: -1;
+	            filter: blur(80px);
+	            border-radius: 50%;
+	            opacity: 0.3;
             animation: move 25s infinite alternate ease-in-out;
         }
 

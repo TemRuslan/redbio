@@ -646,46 +646,51 @@ const translations = {
 
 		        document.querySelectorAll('.liquid-glass').forEach(registerGlassElement);
 
-	        // Mobile menu
-	        (function initMobileMenu() {
-	            const mobileMenuButton = document.getElementById('mobile-menu-button');
-	            const mobileMenuPanel = document.getElementById('mobile-menu-panel');
-	            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-	            const mobileMenuClose = document.getElementById('mobile-menu-close');
+		        // Mobile menu
+		        (function initMobileMenu() {
+		            const mobileMenuButton = document.getElementById('mobile-menu-button');
+		            const mobileMenuPanel = document.getElementById('mobile-menu-panel');
+		            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+		            const mobileMenuClose = document.getElementById('mobile-menu-close');
 
-	            if (!mobileMenuButton || !mobileMenuPanel || !mobileMenuOverlay) return;
+		            if (!mobileMenuButton || !mobileMenuPanel || !mobileMenuOverlay) return;
 
-	            let mobileMenuOpen = false;
-	            let mobileMenuPreviouslyFocused = null;
+		            let mobileMenuOpen = false;
+		            let mobileMenuPreviouslyFocused = null;
 
-	            function setMobileMenuOpen(open, opts = {}) {
-	                if (open === mobileMenuOpen) return;
-	                mobileMenuOpen = open;
+		            // Ensure initial closed state even if the header was injected after Tailwind CDN ran.
+		            mobileMenuOverlay.classList.remove('is-open');
+		            mobileMenuPanel.classList.remove('is-open');
+		            mobileMenuPanel.setAttribute('aria-hidden', 'true');
+		            mobileMenuButton.setAttribute('aria-expanded', 'false');
+		            document.body.classList.remove('overflow-hidden');
 
-	                if (open) {
-	                    mobileMenuPreviouslyFocused = document.activeElement;
-	                    mobileMenuOverlay.classList.remove('hidden');
-	                    mobileMenuPanel.classList.remove('translate-x-full');
-	                    mobileMenuPanel.classList.add('translate-x-0');
-	                    mobileMenuPanel.setAttribute('aria-hidden', 'false');
-	                    mobileMenuButton.setAttribute('aria-expanded', 'true');
-	                    document.body.classList.add('overflow-hidden');
-	                    const focusTarget = mobileMenuClose || mobileMenuPanel.querySelector('a, button, [tabindex]:not([tabindex=\"-1\"])');
-	                    setTimeout(() => focusTarget?.focus?.(), 0);
-	                    return;
-	                }
+		            function setMobileMenuOpen(open, opts = {}) {
+		                if (open === mobileMenuOpen) return;
+		                mobileMenuOpen = open;
 
-	                mobileMenuOverlay.classList.add('hidden');
-	                mobileMenuPanel.classList.add('translate-x-full');
-	                mobileMenuPanel.classList.remove('translate-x-0');
-	                mobileMenuPanel.setAttribute('aria-hidden', 'true');
-	                mobileMenuButton.setAttribute('aria-expanded', 'false');
-	                document.body.classList.remove('overflow-hidden');
-	                if (opts.restoreFocus !== false && mobileMenuPreviouslyFocused?.focus) {
-	                    mobileMenuPreviouslyFocused.focus();
-	                }
-	                mobileMenuPreviouslyFocused = null;
-	            }
+		                if (open) {
+		                    mobileMenuPreviouslyFocused = document.activeElement;
+		                    mobileMenuOverlay.classList.add('is-open');
+		                    mobileMenuPanel.classList.add('is-open');
+		                    mobileMenuPanel.setAttribute('aria-hidden', 'false');
+		                    mobileMenuButton.setAttribute('aria-expanded', 'true');
+		                    document.body.classList.add('overflow-hidden');
+		                    const focusTarget = mobileMenuClose || mobileMenuPanel.querySelector('a, button, [tabindex]:not([tabindex=\"-1\"])');
+		                    setTimeout(() => focusTarget?.focus?.(), 0);
+		                    return;
+		                }
+
+		                mobileMenuOverlay.classList.remove('is-open');
+		                mobileMenuPanel.classList.remove('is-open');
+		                mobileMenuPanel.setAttribute('aria-hidden', 'true');
+		                mobileMenuButton.setAttribute('aria-expanded', 'false');
+		                document.body.classList.remove('overflow-hidden');
+		                if (opts.restoreFocus !== false && mobileMenuPreviouslyFocused?.focus) {
+		                    mobileMenuPreviouslyFocused.focus();
+		                }
+		                mobileMenuPreviouslyFocused = null;
+		            }
 
 	            function closeMobileMenu(opts) {
 	                setMobileMenuOpen(false, opts);
