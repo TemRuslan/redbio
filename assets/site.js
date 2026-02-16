@@ -2,7 +2,7 @@ const translations = {
 		            ru: {
 		                "page-title": "BIO-RED | Инновации в переработке красного шлама",
 		                "nav-mission": "Миссия", "nav-tech": "Технология", "nav-evidence": "Доказательства", "nav-process": "Процесс", "nav-products": "Продукция", "nav-research": "Исследования", "nav-faq": "Вопросы", "nav-download": "СКАЧАТЬ ИССЛЕДОВАНИЯ", "nav-cta": "ЗАПРОС ТЕХНОЛОГИИ",
-		                "hero-title-1": "Превращаем", "hero-title-highlight": "промышленные отходы", "hero-title-2": "в ценные ресурсы",
+		                "hero-title-1": "Превращаем", "hero-title-highlight": "промышленные отходы", "hero-title-2": "в ценные ресурсы", "hero-title-gradient": "промышленные отходы в ценные ресурсы",
 	                "hero-desc": "Инновационное подразделение BIO-RED внедряет биотехнологии для очистки красного шлама и извлечения металлов высокой чистоты.",
 	                "stat-1": "Извлечение<br>Иттрия (Y)", "stat-2": "Нейтрализация<br>Натрия (Na)",
 	                "about-kicker": "Миссия на основе исследований",
@@ -103,7 +103,7 @@ const translations = {
 		            en: {
 		                "page-title": "BIO-RED | Innovations in Red Mud Processing",
 		                "nav-mission": "Mission", "nav-tech": "Technology", "nav-evidence": "Evidence", "nav-process": "Process", "nav-products": "Products", "nav-research": "Research", "nav-faq": "FAQ", "nav-download": "DOWNLOAD RESEARCH", "nav-cta": "REQUEST TECH",
-		                "hero-title-1": "Transforming", "hero-title-highlight": "industrial waste", "hero-title-2": "into valuable resources",
+		                "hero-title-1": "Transforming", "hero-title-highlight": "industrial waste", "hero-title-2": "into valuable resources", "hero-title-gradient": "industrial waste into valuable resources",
 	                "hero-desc": "The BIO-RED innovation division implements biotechnologies for red mud treatment and high-purity metal extraction.",
 	                "stat-1": "Yttrium (Y)<br>Recovery", "stat-2": "Sodium (Na)<br>Neutralization",
 	                "about-kicker": "Research-driven mission",
@@ -204,7 +204,7 @@ const translations = {
 		            me: {
 		                "page-title": "BIO-RED | Inovacije u preradi crvenog mulja",
 		                "nav-mission": "Misija", "nav-tech": "Tehnologija", "nav-evidence": "Dokazi", "nav-process": "Proces", "nav-products": "Proizvodi", "nav-research": "Istraživanja", "nav-faq": "Pitanja", "nav-download": "PREUZMI ISTRAŽIVANJA", "nav-cta": "ZAHTJEV TEHNOLOGIJE",
-		                "hero-title-1": "Pretvaramo", "hero-title-highlight": "industrijski otpad", "hero-title-2": "u vrijedne resurse",
+		                "hero-title-1": "Pretvaramo", "hero-title-highlight": "industrijski otpad", "hero-title-2": "u vrijedne resurse", "hero-title-gradient": "industrijski otpad u vrijedne resurse",
 	                "hero-desc": "Inovaciono odjeljenje BIO-RED uvodi biotehnologije za prečišćavanje crvenog mulja i ekstrakciju metala visoke čistoće.",
 	                "stat-1": "Ekstrakcija<br>Itrijuma (Y)", "stat-2": "Neutralizacija<br>Natrijuma (Na)",
 		                "about-kicker": "Misija zasnovana na istraživanju",
@@ -303,7 +303,7 @@ const translations = {
 		            zh: {
 		                "page-title": "BIO-RED｜赤泥处理与资源化创新",
 		                "nav-mission": "使命", "nav-tech": "技术", "nav-evidence": "证据", "nav-process": "流程", "nav-products": "产品", "nav-research": "研究", "nav-faq": "常见问题", "nav-download": "下载研究", "nav-cta": "技术咨询",
-		                "hero-title-1": "将", "hero-title-highlight": "工业废弃物", "hero-title-2": "转化为有价值的资源",
+		                "hero-title-1": "将", "hero-title-highlight": "工业废弃物", "hero-title-2": "转化为有价值的资源", "hero-title-gradient": "工业废弃物转化为有价值的资源",
 		                "hero-desc": "BIO-RED 创新部门采用生物技术处理赤泥，并提取高纯度金属。",
 		                "stat-1": "钇 (Y)<br>回收率", "stat-2": "钠 (Na)<br>中和率",
 		                "about-kicker": "以研究为驱动的使命",
@@ -637,6 +637,8 @@ const translations = {
 
 	        function registerGlassElement(el) {
 	            if (!el || el.dataset.glassObserved) return;
+	            if (el.id === 'site-nav-inner') return;
+	            if (el.id === 'mobile-menu-panel') return;
 	            el.dataset.glassObserved = "1";
 	            el.style.opacity = "0";
 	            el.style.transform = "translateY(30px)";
@@ -648,69 +650,141 @@ const translations = {
 
 		        // Mobile menu
 		        (function initMobileMenu() {
-		            const mobileMenuButton = document.getElementById('mobile-menu-button');
-		            const mobileMenuPanel = document.getElementById('mobile-menu-panel');
-		            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-		            const mobileMenuClose = document.getElementById('mobile-menu-close');
-
-		            if (!mobileMenuButton || !mobileMenuPanel || !mobileMenuOverlay) return;
+		            const TRANSITION_MS = 180;
 
 		            let mobileMenuOpen = false;
 		            let mobileMenuPreviouslyFocused = null;
+		            let removeOutsideListener = null;
+		            let removeResizeListener = null;
 
-		            // Ensure initial closed state even if the header was injected after Tailwind CDN ran.
-		            mobileMenuOverlay.classList.remove('is-open');
-		            mobileMenuPanel.classList.remove('is-open');
-		            mobileMenuPanel.setAttribute('aria-hidden', 'true');
-		            mobileMenuButton.setAttribute('aria-expanded', 'false');
-		            document.body.classList.remove('overflow-hidden');
+		            function getEls() {
+		                const button = document.getElementById('mobile-menu-button');
+		                const panel = document.getElementById('mobile-menu-panel');
+		                const burgerIcon = button?.querySelector?.('[data-mobile-menu-icon="burger"]') || null;
+		                const closeIcon = button?.querySelector?.('[data-mobile-menu-icon="close"]') || null;
+		                const navInner = document.getElementById('site-nav-inner');
+		                return { button, panel, burgerIcon, closeIcon, navInner };
+		            }
+
+		            function positionPanelUnderButton(els) {
+		                if (!els.button || !els.panel) return;
+		                const rect = els.button.getBoundingClientRect();
+		                const top = Math.max(8, Math.round(rect.bottom + 6));
+		                els.panel.style.setProperty('--mobile-menu-top', `${top}px`);
+		            }
+
+		            function syncButtonIcon(els, open) {
+		                if (els.burgerIcon) {
+		                    els.burgerIcon.classList.toggle?.('hidden', open);
+		                    els.burgerIcon.style.display = open ? 'none' : '';
+		                }
+		                if (els.closeIcon) {
+		                    els.closeIcon.classList.toggle?.('hidden', !open);
+		                    els.closeIcon.style.display = open ? '' : 'none';
+		                }
+		                els.button?.setAttribute?.('aria-label', open ? 'Close menu' : 'Open menu');
+		            }
 
 		            function setMobileMenuOpen(open, opts = {}) {
-		                if (open === mobileMenuOpen) return;
+		                const els = getEls();
+		                if (!els.button || !els.panel) return;
+
+		                if (open === mobileMenuOpen && opts.force !== true) return;
 		                mobileMenuOpen = open;
 
 		                if (open) {
 		                    mobileMenuPreviouslyFocused = document.activeElement;
-		                    mobileMenuOverlay.classList.add('is-open');
-		                    mobileMenuPanel.classList.add('is-open');
-		                    mobileMenuPanel.setAttribute('aria-hidden', 'false');
-		                    mobileMenuButton.setAttribute('aria-expanded', 'true');
-		                    document.body.classList.add('overflow-hidden');
-		                    const focusTarget = mobileMenuClose || mobileMenuPanel.querySelector('a, button, [tabindex]:not([tabindex=\"-1\"])');
+		                    positionPanelUnderButton(els);
+		                    els.panel.hidden = false;
+		                    els.panel.setAttribute('aria-hidden', 'false');
+		                    // Animate open.
+		                    requestAnimationFrame(() => els.panel.classList.add('is-open'));
+		                    els.button.setAttribute('aria-expanded', 'true');
+		                    syncButtonIcon(els, true);
+
+		                    const onResize = () => positionPanelUnderButton(getEls());
+		                    window.addEventListener('resize', onResize, { passive: true });
+		                    removeResizeListener = () => window.removeEventListener('resize', onResize);
+
+		                    // Close on click outside menu/button.
+		                    const outsideHandler = (e) => {
+		                        const { button, panel } = getEls();
+		                        if (!button || !panel) return;
+		                        const t = e.target;
+		                        if (t && (panel.contains(t) || button.contains(t))) return;
+		                        closeMobileMenu();
+		                    };
+		                    document.addEventListener('pointerdown', outsideHandler, true);
+		                    removeOutsideListener = () => document.removeEventListener('pointerdown', outsideHandler, true);
+
+		                    const focusTarget = els.panel.querySelector?.('a, button, [tabindex]:not([tabindex=\"-1\"])');
 		                    setTimeout(() => focusTarget?.focus?.(), 0);
 		                    return;
 		                }
 
-		                mobileMenuOverlay.classList.remove('is-open');
-		                mobileMenuPanel.classList.remove('is-open');
-		                mobileMenuPanel.setAttribute('aria-hidden', 'true');
-		                mobileMenuButton.setAttribute('aria-expanded', 'false');
-		                document.body.classList.remove('overflow-hidden');
+		                removeOutsideListener?.();
+		                removeOutsideListener = null;
+		                removeResizeListener?.();
+		                removeResizeListener = null;
+
+		                els.panel.classList.remove('is-open');
+		                els.panel.setAttribute('aria-hidden', 'true');
+		                els.button.setAttribute('aria-expanded', 'false');
+		                syncButtonIcon(els, false);
+
+		                // Hide after the transition so it doesn't capture taps.
+		                setTimeout(() => {
+		                    const current = getEls();
+		                    if (current.panel) current.panel.hidden = true;
+		                }, TRANSITION_MS);
+
 		                if (opts.restoreFocus !== false && mobileMenuPreviouslyFocused?.focus) {
 		                    mobileMenuPreviouslyFocused.focus();
 		                }
 		                mobileMenuPreviouslyFocused = null;
 		            }
 
-	            function closeMobileMenu(opts) {
-	                setMobileMenuOpen(false, opts);
-	            }
+		            function closeMobileMenu(opts) {
+		                setMobileMenuOpen(false, opts);
+		            }
 
-	            window.__closeMobileMenu = closeMobileMenu;
-	            window.__isMobileMenuOpen = () => mobileMenuOpen;
+		            function setupOnce() {
+		                const els = getEls();
+		                if (!els.button || !els.panel) return;
+		                if (els.button.dataset.mobileMenuInit === '1') return;
+		                els.button.dataset.mobileMenuInit = '1';
 
-	            mobileMenuButton.addEventListener('click', () => setMobileMenuOpen(!mobileMenuOpen));
-	            mobileMenuOverlay.addEventListener('click', () => closeMobileMenu());
-	            mobileMenuClose?.addEventListener('click', () => closeMobileMenu());
+		                // Always start closed.
+		                els.panel.classList.remove('is-open');
+		                els.panel.hidden = true;
+		                els.panel.setAttribute('aria-hidden', 'true');
+		                els.button.setAttribute('aria-expanded', 'false');
+		                syncButtonIcon(els, false);
+		                mobileMenuOpen = false;
 
-	            mobileMenuPanel.querySelectorAll('[data-mobile-menu-close]').forEach((el) => {
-	                el.addEventListener('click', () => closeMobileMenu());
-	            });
+		                window.__closeMobileMenu = closeMobileMenu;
+		                window.__isMobileMenuOpen = () => mobileMenuOpen;
 
-	            document.addEventListener('keydown', (e) => {
-	                if (e.key === 'Escape' && mobileMenuOpen) closeMobileMenu();
-	            });
-	        })();
+		                els.button.addEventListener('click', () => setMobileMenuOpen(!mobileMenuOpen));
+
+		                // Close on any link/button marked with data-mobile-menu-close (delegated, so works reliably).
+		                els.panel.addEventListener('click', (e) => {
+		                    const target = e.target?.closest?.('[data-mobile-menu-close]');
+		                    if (target) closeMobileMenu();
+		                });
+
+		                document.addEventListener('keydown', (e) => {
+		                    if (e.key === 'Escape' && mobileMenuOpen) closeMobileMenu();
+		                });
+		            }
+
+		            if (document.readyState === 'loading') {
+		                document.addEventListener('DOMContentLoaded', setupOnce);
+		            } else {
+		                setupOnce();
+		            }
+		            window.addEventListener('redbio:header-injected', setupOnce);
+		        })();
 
 	        // Request tech modal
 	        const requestTechBtns = document.querySelectorAll('#request-tech-btn,[data-request-tech]');

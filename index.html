@@ -51,41 +51,35 @@
 	            transform: scale(1.02);
 	        }
 
-	        /* Mobile menu (works even when header is injected after Tailwind CDN initializes) */
-	        #mobile-menu-overlay {
-	            display: none;
-	            position: fixed;
-	            inset: 0;
-	            background: rgba(0, 0, 0, 0.3);
-	            backdrop-filter: blur(8px);
-	            -webkit-backdrop-filter: blur(8px);
-	            z-index: 60;
-	        }
-
-	        #mobile-menu-overlay.is-open {
-	            display: block;
+	        /* Mobile dropdown menu (opens under burger; no dimmed background) */
+	        #site-nav-inner {
+	            position: relative;
 	        }
 
 	        #mobile-menu-panel {
 	            position: fixed;
-	            top: 0;
-	            right: 0;
-	            width: min(84vw, 360px);
-	            max-height: calc(100vh - 16px);
-	            height: auto;
+	            top: var(--mobile-menu-top, 72px);
+	            left: 50%;
+	            width: min(92vw, 360px);
+	            max-height: calc(100vh - var(--mobile-menu-top, 72px) - 16px);
 	            overflow: auto;
-	            transform: translateX(110%);
-	            transition: transform 200ms ease-out;
-	            z-index: 70;
-	            border-bottom-left-radius: 28px;
+	            z-index: 80;
+	            background: #ffffff;
+	            box-shadow: 0 18px 50px -24px rgba(0, 0, 0, 0.35);
+	            opacity: 0;
+	            transform: translateX(-50%) translateY(-4px) scale(0.98);
+	            transform-origin: top center;
+	            pointer-events: none;
+	            transition: opacity 160ms ease, transform 160ms ease;
 	        }
 
 	        #mobile-menu-panel.is-open {
-	            transform: translateX(0);
+	            opacity: 1;
+	            transform: translateX(-50%) translateY(0) scale(1);
+	            pointer-events: auto;
 	        }
 
 	        @media (min-width: 1024px) {
-	            #mobile-menu-overlay,
 	            #mobile-menu-panel {
 	                display: none !important;
 	            }
@@ -105,18 +99,22 @@
             100% { transform: translate(150px, 100px) scale(1.2); }
         }
 
-        .hero-text {
-            background: linear-gradient(90deg, #bc4749, #6a994e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+	        .hero-text {
+	            background: linear-gradient(90deg, #bc4749, #6a994e);
+	            -webkit-background-clip: text;
+	            -webkit-text-fill-color: transparent;
+	        }
 
-        .step-card::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            right: -20px;
-            width: 40px;
+	        .text-balance {
+	            text-wrap: balance;
+	        }
+
+	        .step-card::before {
+	            content: '';
+	            position: absolute;
+	            top: 50%;
+	            right: -20px;
+	            width: 40px;
             height: 2px;
             background: linear-gradient(90deg, var(--primary), transparent);
             z-index: -1;
@@ -193,26 +191,26 @@
 			    <div id="site-header"></div>
 			    <script src="partials/header.include.js" data-target="site-header" data-url="partials/header.html"></script>
 	
-	    <!-- Hero Section -->
-	    <section id="share" class="pt-48 pb-20 px-6" style="scroll-margin-top: 120px;">
-	        <div class="max-w-7xl mx-auto text-center">
-            <h1 class="text-6xl md:text-8xl font-extrabold mb-8 leading-tight tracking-tight">
-                <span data-key="hero-title-1">Transforming</span> <span class="hero-text text-glow" data-key="hero-title-highlight">industrial waste</span> <span data-key="hero-title-2">into valuable resources</span>
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-500 max-w-4xl mx-auto mb-12 font-light" data-key="hero-desc">
-                The BIO-RED innovation division implements biotechnologies for red mud treatment and high-purity metal extraction.
-            </p>
-	            <div class="flex flex-wrap justify-center gap-6">
-	                <div class="liquid-glass px-10 py-6 flex items-center gap-4">
-	                    <span class="text-4xl font-black text-[#bc4749]">91%<sup class="ml-1 text-xs align-super text-gray-400"><a href="#paper-fmicb" class="hover:text-[#bc4749]">[1]</a></sup></span>
-	                    <span class="text-[10px] text-left text-gray-400 uppercase font-bold tracking-widest leading-tight" data-key="stat-1">Yttrium (Y)<br>Recovery</span>
-	                </div>
-	                <div class="liquid-glass px-10 py-6 flex items-center gap-4">
-	                    <span class="text-4xl font-black text-[#6a994e]">95%<sup class="ml-1 text-xs align-super text-gray-400"><a href="#paper-fmicb" class="hover:text-[#bc4749]">[1]</a></sup></span>
-	                    <span class="text-[10px] text-left text-gray-400 uppercase font-bold tracking-widest leading-tight" data-key="stat-2">Sodium (Na)<br>Neutralization</span>
-	                </div>
-	            </div>
-	        </div>
+		    <!-- Hero Section -->
+		    <section id="share" class="pt-32 sm:pt-40 lg:pt-48 pb-16 sm:pb-20 px-4 sm:px-6" style="scroll-margin-top: 120px;">
+		        <div class="max-w-7xl mx-auto text-center">
+	            <h1 class="text-balance break-words text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 sm:mb-8 leading-[1.05] sm:leading-tight tracking-tight">
+	                <span data-key="hero-title-1">Transforming</span> <span class="hero-text text-glow" data-key="hero-title-gradient">industrial waste into valuable resources</span>
+	            </h1>
+	            <p class="break-words text-base sm:text-lg md:text-2xl text-gray-500 max-w-2xl md:max-w-4xl mx-auto mb-10 sm:mb-12 font-light" data-key="hero-desc">
+	                The BIO-RED innovation division implements biotechnologies for red mud treatment and high-purity metal extraction.
+	            </p>
+		            <div class="flex flex-wrap justify-center gap-6">
+		                <div class="liquid-glass px-7 sm:px-10 py-5 sm:py-6 flex items-center gap-4">
+		                    <span class="text-4xl font-black text-[#bc4749]">91%<sup class="ml-1 text-xs align-super text-gray-400"><a href="#paper-fmicb" class="hover:text-[#bc4749]">[1]</a></sup></span>
+		                    <span class="text-[10px] text-left text-gray-400 uppercase font-bold tracking-widest leading-tight" data-key="stat-1">Yttrium (Y)<br>Recovery</span>
+		                </div>
+		                <div class="liquid-glass px-7 sm:px-10 py-5 sm:py-6 flex items-center gap-4">
+		                    <span class="text-4xl font-black text-[#6a994e]">95%<sup class="ml-1 text-xs align-super text-gray-400"><a href="#paper-fmicb" class="hover:text-[#bc4749]">[1]</a></sup></span>
+		                    <span class="text-[10px] text-left text-gray-400 uppercase font-bold tracking-widest leading-tight" data-key="stat-2">Sodium (Na)<br>Neutralization</span>
+		                </div>
+		            </div>
+		        </div>
 	    </section>
 
 	    <!-- Блок: Этапы процесса -->
