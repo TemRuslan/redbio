@@ -585,6 +585,42 @@ const translations = {
 
 	            document.documentElement.lang = lang;
 
+	            // Persist chosen language between page navigations
+	            try {
+	                window.localStorage?.setItem('redbio.lang', lang);
+	            } catch (_) {}
+
+	            // Keep current URL and menu links in sync with selected language
+	            (function syncLangInUrls() {
+	                try {
+	                    const url = new URL(window.location.href);
+	                    url.searchParams.set('lang', lang);
+	                    history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
+	                } catch (_) {}
+
+	                try {
+	                    document.querySelectorAll('a[href]').forEach((a) => {
+	                        const href = a.getAttribute('href') || '';
+	                        if (!href) return;
+	                        if (href.startsWith('#')) return;
+	                        if (href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:')) return;
+	                        if (/^https?:\/\//i.test(href)) return;
+
+	                        // Only touch internal html page navigations
+	                        const hrefNoHash = href.split('#')[0];
+	                        const hrefNoQuery = hrefNoHash.split('?')[0];
+	                        if (!/\.html$/i.test(hrefNoQuery)) return;
+
+	                        const target = new URL(href, window.location.href);
+	                        target.searchParams.set('lang', lang);
+
+	                        // Keep links relative (this site uses same-folder html files)
+	                        const file = target.pathname.split('/').filter(Boolean).pop() || target.pathname;
+	                        a.setAttribute('href', `${file}${target.search}${target.hash}`);
+	                    });
+	                } catch (_) {}
+	            })();
+
 	            renderResearch(lang);
 	        }
 
@@ -751,6 +787,17 @@ const translations = {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
+        // Tech nav: toggles between Technology page and Home main block
+        (function initTechNavToggle() {
+            const pathname = window.location.pathname || '';
+            const file = pathname.split('/').filter(Boolean).pop() || '';
+            const isTechPage = file === 'technology.html';
+
+            document.querySelectorAll('a[data-nav=\"tech\"]').forEach((a) => {
+                a.setAttribute('href', isTechPage ? 'index.html#share' : 'technology.html');
+            });
+        })();
+
         // Header links: when a section doesn't exist on the current page, route to home page
         (function fixHeaderSectionLinks() {
             const nav = document.getElementById('site-logo')?.closest('nav');
@@ -769,5 +816,20 @@ const translations = {
             });
         })();
 
-        // По умолчанию ставим английский
-        window.addEventListener('load', () => setLang('en'));
+        // Initialize language (URL param wins; then localStorage; then English)
+        document.addEventListener('DOMContentLoaded', () => {
+            let initialLang = 'en';
+            try {
+                const urlLang = new URLSearchParams(window.location.search || '').get('lang');
+                if (urlLang && translations[urlLang]) initialLang = urlLang;
+            } catch (_) {}
+
+            if (initialLang === 'en') {
+                try {
+                    const stored = window.localStorage?.getItem('redbio.lang');
+                    if (stored && translations[stored]) initialLang = stored;
+                } catch (_) {}
+            }
+
+            setLang(initialLang);
+        });
