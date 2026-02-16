@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <mask id="b-mask">
+    <rect width="512" height="512" fill="#000"/>
+
+    <!-- Outer shapes (visible) -->
+    <rect x="150" y="110" width="110" height="292" rx="48" fill="#fff"/>
+    <rect x="215" y="110" width="210" height="140" rx="70" fill="#fff"/>
+    <rect x="215" y="262" width="210" height="140" rx="70" fill="#fff"/>
+
+    <!-- Holes (cut out) -->
+    <rect x="260" y="150" width="125" height="60" rx="30" fill="#000"/>
+    <rect x="260" y="302" width="125" height="60" rx="30" fill="#000"/>
+  </mask>
+
+  <rect width="512" height="512" fill="#000" mask="url(#b-mask)"/>
+</svg>

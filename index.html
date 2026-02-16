@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIO-RED | Innovations in Red Mud Processing</title>
+    <link rel="icon" href="favicon/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#bc4749">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-config" content="favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #bc4749; 
+            --secondary: #6a994e;
+            --glass: rgba(255, 255, 255, 0.12);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #fef8f8 100%);
+            min-height: 100vh;
+            color: #1a1a1a;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .liquid-glass {
+            background: var(--glass);
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 28px;
+            box-shadow: 0 10px 40px -10px rgba(188, 71, 73, 0.12);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .liquid-glass:hover {
+            background: rgba(255, 255, 255, 0.22);
+            box-shadow: 0 20px 60px -15px rgba(188, 71, 73, 0.18);
+        }
+
+        .hover-scale:hover {
+            transform: scale(1.02);
+        }
+
+        .blob {
+            position: fixed;
+            z-index: -1;
+            filter: blur(80px);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: move 25s infinite alternate ease-in-out;
+        }
+
+        @keyframes move {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(150px, 100px) scale(1.2); }
+        }
+
+        .hero-text {
+            background: linear-gradient(90deg, #bc4749, #6a994e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -20px;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            z-index: -1;
+        }
+
+        @media (max-width: 768px) {
+            .step-card::before { display: none; }
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        .lang-btn.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        /* FAQ accordion */
+        .faq-item {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .faq-summary {
+            cursor: pointer;
+            padding: 1.5rem;
+            user-select: none;
+        }
+
+        .faq-summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .faq-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 9999px;
+            display: grid;
+            place-items: center;
+            flex: none;
+            color: var(--primary);
+            background: rgba(188, 71, 73, 0.08);
+            border: 1px solid rgba(188, 71, 73, 0.18);
+            transition: transform 180ms ease, background 180ms ease;
+        }
+
+        details[open] .faq-icon {
+            transform: rotate(180deg);
+            background: rgba(106, 153, 78, 0.08);
+            border-color: rgba(106, 153, 78, 0.18);
+            color: var(--secondary);
+        }
+
+        .faq-content {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+
+        details[open] .faq-summary {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .faq-summary:focus-visible {
+            outline: 2px solid rgba(188, 71, 73, 0.5);
+            outline-offset: 4px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="blob w-[500px] h-[500px] bg-red-100 top-[-20%] left-[-10%]"></div>
+    <div class="blob w-[400px] h-[400px] bg-green-50 bottom-[-10%] right-[-5%]" style="animation-delay: -7s;"></div>
+
+    <!-- Навигация -->
+    <nav class="fixed w-full z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto liquid-glass px-8 py-3 flex justify-between items-center">
+            <div class="text-2xl font-extrabold tracking-tighter">
+                <span class="text-[#bc4749]">BIO</span>RED
+            </div>
+            <div class="hidden lg:flex space-x-8 font-semibold text-xs uppercase tracking-widest text-gray-600">
+                <a href="#about" class="hover:text-[#bc4749] transition" data-key="nav-mission">Mission</a>
+                <a href="#process" class="hover:text-[#bc4749] transition" data-key="nav-process">Process</a>
+                <a href="#products" class="hover:text-[#bc4749] transition" data-key="nav-products">Products</a>
+                <a href="#faq" class="hover:text-[#bc4749] transition" data-key="nav-faq">FAQ</a>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <!-- Language Switcher -->
+                <div class="flex gap-2 text-[10px] font-bold text-gray-400 border-r border-gray-200 pr-4 mr-2">
+                    <button onclick="setLang('en')" class="lang-btn active" id="btn-en">EN</button>
+                    <button onclick="setLang('ru')" class="lang-btn" id="btn-ru">RU</button>
+                    <button onclick="setLang('me')" class="lang-btn" id="btn-me">ME</button>
+                    <button onclick="setLang('zh')" class="lang-btn" id="btn-zh">CH</button>
+                </div>
+                <button id="request-tech-btn" type="button" class="hover-scale bg-[#bc4749] text-white px-7 py-2.5 rounded-full text-xs font-bold hover:bg-[#a43d3f] transition shadow-xl" data-key="nav-cta">
+                    REQUEST TECH
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-48 pb-20 px-6">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-6xl md:text-8xl font-extrabold mb-8 leading-tight tracking-tight">
+                <span data-key="hero-title-1">Transforming</span> <span class="hero-text text-glow" data-key="hero-title-highlight">industrial waste</span> <span data-key="hero-title-2">into valuable resources</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-500 max-w-4xl mx-auto mb-12 font-light" data-key="hero-desc">
+                The BIO-RED innovation division implements biotechnologies for red mud treatment and high-purity metal extraction.
+            </p>
+            <div class="flex flex-wrap justify-center gap-6">
+                <div class="liquid-glass px-10 py-6 flex items-center gap-4">
+                    <span class="text-4xl font-black text-[#bc4749]">91%</span>
+                    <span class="text-[10px] text-left text-gray-400 uppercase font-bold tracking-widest leading-tight" data-key="stat-1">Yttrium (Y)<br>Recovery</span>
+                </div>
+                <div class="liquid-glass px-10 py-6 flex items-center gap-4">
+                    <span class="text-4xl font-black text-[#6a994e]">95%</span>
+                    <span class="text-[10px] text-left text-gray-400 uppercase font-bold tracking-widest leading-tight" data-key="stat-2">Sodium (Na)<br>Neutralization</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Блок: Этапы процесса -->
+    <section id="process" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4" data-key="proc-title">Transformation Cycle</h2>
+                <div class="h-1 w-20 bg-[#bc4749] mx-auto"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="liquid-glass p-8 relative step-card">
+                    <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mb-6 border border-red-100 font-bold text-[#bc4749]">1</div>
+                    <h3 class="font-bold mb-3 uppercase text-xs tracking-wider" data-key="step-1-title">Sludge Collection</h3>
+                    <p class="text-sm text-gray-500" data-key="step-1-desc">Acceptance of Bayer process waste with high alkaline content.</p>
+                </div>
+                <div class="liquid-glass p-8 relative step-card">
+                    <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center mb-6 border border-green-100 font-bold text-[#6a994e]">2</div>
+                    <h3 class="font-bold mb-3 uppercase text-xs tracking-wider" data-key="step-2-title">Bio-Reaction</h3>
+                    <p class="text-sm text-gray-500" data-key="step-2-desc">Introduction of Sb. thermosulfidooxidans strain for acid generation.</p>
+                </div>
+                <div class="liquid-glass p-8 relative step-card">
+                    <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-6 border border-blue-100 font-bold text-blue-500">3</div>
+                    <h3 class="font-bold mb-3 uppercase text-xs tracking-wider" data-key="step-3-title">Extraction</h3>
+                    <p class="text-sm text-gray-500" data-key="step-3-desc">Selective leaching of Al, Ce, Sc, and Y in a controlled environment.</p>
+                </div>
+                <div class="liquid-glass p-8">
+                    <div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mb-6 border border-gray-100 font-bold text-gray-500">4</div>
+                    <h3 class="font-bold mb-3 uppercase text-xs tracking-wider" data-key="step-4-title">Recycling</h3>
+                    <p class="text-sm text-gray-500" data-key="step-4-desc">Producing purified soil for construction and high-purity metals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Блок: Продукция и применение -->
+    <section id="products" class="py-24 px-6 bg-white/40">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8">
+                <h2 class="text-4xl font-bold" data-key="prod-title">Rare Earth Resources for the Future</h2>
+                <p class="text-gray-600" data-key="prod-desc">We don't just clean waste — we extract critical components for modern electronics and green energy.</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-6 border border-gray-100 rounded-3xl bg-white shadow-sm hover:shadow-md transition">
+                        <span class="block text-[#bc4749] font-bold text-xl mb-1">Sc (<span data-key="metal-1">Scandium</span>)</span>
+                        <span class="text-xs text-gray-400" data-key="metal-1-use">Aerospace & Lasers</span>
+                    </div>
+                    <div class="p-6 border border-gray-100 rounded-3xl bg-white shadow-sm hover:shadow-md transition">
+                        <span class="block text-[#bc4749] font-bold text-xl mb-1">Ce (<span data-key="metal-2">Cerium</span>)</span>
+                        <span class="text-xs text-gray-400" data-key="metal-2-use">Catalysts & Glass</span>
+                    </div>
+                    <div class="p-6 border border-gray-100 rounded-3xl bg-white shadow-sm hover:shadow-md transition">
+                        <span class="block text-[#bc4749] font-bold text-xl mb-1">Y (<span data-key="metal-3">Yttrium</span>)</span>
+                        <span class="text-xs text-gray-400" data-key="metal-3-use">Superconductors & LED</span>
+                    </div>
+	                    <div class="p-6 border border-gray-100 rounded-3xl bg-white shadow-sm hover:shadow-md transition">
+	                        <span class="block text-[#6a994e] font-bold text-xl mb-1" data-key="prod-eco-gravel">Eco-Gravel</span>
+	                        <span class="text-xs text-gray-400" data-key="metal-4-use">Eco-Safe Construction</span>
+	                    </div>
+                </div>
+            </div>
+            <div class="liquid-glass p-4">
+                <div class="rounded-2xl overflow-hidden grayscale hover:grayscale-0 transition duration-700">
+                    <img src="https://images.unsplash.com/photo-1518152006812-edab29b069ac?auto=format&fit=crop&q=80&w=1000" alt="Laboratory" class="w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Блок: Научное обоснование -->
+    <section class="py-24 px-6">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="liquid-glass p-12 bg-gradient-to-br from-white/20 to-transparent">
+                <h2 class="text-2xl font-bold mb-8 italic" data-key="quote">«BIO-RED technology reduces the carbon footprint of aluminum production by 18% through total red mud recycling.»</h2>
+                <div class="flex justify-center items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200"></div>
+                    <div class="text-left">
+                        <p class="font-bold text-sm" data-key="quote-author">Professor Jinlan Xia</p>
+                        <p class="text-xs text-gray-400" data-key="quote-inst">Central South University, Changsha</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Блок: FAQ -->
+    <section id="faq" class="py-24 px-6">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-3xl font-bold mb-12 text-center" data-key="faq-title">Frequently Asked Questions</h2>
+            <div class="space-y-4">
+                <details class="liquid-glass faq-item">
+                    <summary class="faq-summary font-bold list-none flex justify-between items-center uppercase text-xs tracking-widest">
+                        <span data-key="faq-1-q">Are the bacteria safe?</span>
+                        <span class="faq-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </summary>
+                    <div class="faq-content">
+                        <p class="text-sm text-gray-500" data-key="faq-1-a">Yes, Sb. thermosulfidooxidans are natural microorganisms active only within bioreactors.</p>
+                    </div>
+                </details>
+                <details class="liquid-glass faq-item">
+                    <summary class="faq-summary font-bold list-none flex justify-between items-center uppercase text-xs tracking-widest">
+                        <span data-key="faq-2-q">Minimum volume?</span>
+                        <span class="faq-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </summary>
+                    <div class="faq-content">
+                        <p class="text-sm text-gray-500" data-key="faq-2-a">We handle orders starting from 100 units/tons. We work with client material or procure it ourselves.</p>
+                    </div>
+                </details>
+                <!-- Добавленные 4 вопроса -->
+                <details class="liquid-glass faq-item">
+                    <summary class="faq-summary font-bold list-none flex justify-between items-center uppercase text-xs tracking-widest">
+                        <span data-key="faq-3-q">How long does one cycle take?</span>
+                        <span class="faq-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </summary>
+                    <div class="faq-content">
+                        <p class="text-sm text-gray-500" data-key="faq-3-a">A standard bio-leaching cycle takes 7 to 14 days depending on the mineral composition of the sludge.</p>
+                    </div>
+                </details>
+                <details class="liquid-glass faq-item">
+                    <summary class="faq-summary font-bold list-none flex justify-between items-center uppercase text-xs tracking-widest">
+                        <span data-key="faq-4-q">What is the purity of extracted metals?</span>
+                        <span class="faq-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </summary>
+                    <div class="faq-content">
+                        <p class="text-sm text-gray-500" data-key="faq-4-a">Our technology allows achieving a purity level of 99.5% to 99.9% for scandium and yttrium oxides.</p>
+                    </div>
+                </details>
+                <details class="liquid-glass faq-item">
+                    <summary class="faq-summary font-bold list-none flex justify-between items-center uppercase text-xs tracking-widest">
+                        <span data-key="faq-5-q">Do you offer mobile processing units?</span>
+                        <span class="faq-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </summary>
+                    <div class="faq-content">
+                        <p class="text-sm text-gray-500" data-key="faq-5-a">Yes, we provide modular processing stations that can be deployed directly at the red mud storage site.</p>
+                    </div>
+                </details>
+                <details class="liquid-glass faq-item">
+                    <summary class="faq-summary font-bold list-none flex justify-between items-center uppercase text-xs tracking-widest">
+                        <span data-key="faq-6-q">Is the process economically viable?</span>
+                        <span class="faq-icon" aria-hidden="true">
+                            <svg viewBox="0 0 20 20" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </summary>
+                    <div class="faq-content">
+                        <p class="text-sm text-gray-500" data-key="faq-6-a">The cost of rare earth extraction combined with waste neutralization makes the process highly profitable compared to traditional disposal.</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer id="contact" class="py-20 px-6 bg-white">
+        <div class="max-w-7xl mx-auto border-t border-gray-100 pt-16 grid md:grid-cols-4 gap-12 items-start">
+            <div class="space-y-6">
+                <div class="text-3xl font-black">
+                    <span class="text-[#bc4749]">BIO</span>RED
+                </div>
+                <p class="text-sm text-gray-400 leading-relaxed" data-key="footer-desc">Leaders in biometallurgy since 2018.</p>
+            </div>
+            <div class="space-y-4">
+                <h4 class="font-bold text-xs uppercase tracking-widest" data-key="footer-contacts">Contacts</h4>
+                <p class="text-sm text-gray-500" data-key="footer-email">Email: tech@bio-red.com</p>
+                <p class="text-sm text-gray-500" data-key="footer-phone">Phone: —</p>
+                <p class="text-sm text-gray-500" data-key="footer-lab">Laboratory: Changsha, Hunan, PRC</p>
+                <p class="text-sm text-gray-500" data-key="footer-address">Address: —</p>
+            </div>
+            <div class="space-y-6">
+                <h4 class="font-bold text-xs uppercase tracking-widest" data-key="footer-news">Newsletter</h4>
+                <div class="flex">
+                    <input type="email" placeholder="E-mail" data-placeholder-key="footer-email-placeholder" class="bg-gray-50 border-none px-4 py-3 rounded-l-2xl w-full text-sm focus:ring-1 focus:ring-[#bc4749]">
+                    <button class="bg-[#bc4749] text-white px-6 py-3 rounded-r-2xl">→</button>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <h4 class="font-bold text-xs uppercase tracking-widest" data-key="footer-map">Map</h4>
+                <div class="liquid-glass p-3">
+                    <iframe
+                        title="Map"
+                        data-title-key="footer-map"
+                        class="w-full h-56 rounded-2xl border border-gray-100"
+                        src="https://www.openstreetmap.org/export/embed.html?bbox=112.90%2C28.19%2C112.98%2C28.26&layer=mapnik&marker=28.2282%2C112.9388"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Request Tech Modal -->
+    <div id="requestTechModal" class="fixed inset-0 z-[60] hidden" role="dialog" aria-modal="true" aria-labelledby="requestTechTitle">
+        <div id="requestTechBackdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+        <div class="relative h-full w-full flex items-center justify-center p-6">
+            <div class="liquid-glass w-full max-w-lg p-8 bg-white/70">
+                <div class="flex items-start justify-between gap-6">
+                    <div>
+                        <h3 id="requestTechTitle" class="text-xl font-extrabold tracking-tight" data-key="modal-title">Request technology</h3>
+                        <p class="mt-2 text-sm text-gray-600" data-key="modal-desc">Leave your email and we will contact you.</p>
+                    </div>
+                    <button id="requestTechClose" type="button" class="text-gray-500 hover:text-gray-900 transition text-2xl leading-none" aria-label="Close">×</button>
+                </div>
+                <form id="requestTechForm" class="mt-6 space-y-4" novalidate>
+                    <label class="block">
+                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500" data-key="modal-email-label">E-mail</span>
+                        <input
+                            id="requestTechEmail"
+                            type="email"
+                            required
+                            autocomplete="email"
+                            inputmode="email"
+                            placeholder="E-mail"
+                            data-placeholder-key="modal-email-placeholder"
+                            class="mt-2 w-full bg-white/70 border border-gray-200 px-4 py-3 rounded-2xl text-sm focus:ring-1 focus:ring-[#bc4749] focus:outline-none"
+                        >
+                    </label>
+                    <p id="requestTechError" class="hidden text-sm text-[#bc4749]" data-key="modal-email-error">Please enter a valid email.</p>
+                    <div class="flex flex-col sm:flex-row gap-3 sm:justify-end">
+                        <button id="requestTechCancel" type="button" class="px-6 py-3 rounded-2xl text-sm font-bold border border-gray-200 bg-white/60 hover:bg-white/80 transition" data-key="modal-cancel">Cancel</button>
+                        <button type="submit" class="px-6 py-3 rounded-2xl text-sm font-bold text-white bg-[#bc4749] hover:bg-[#a43d3f] transition shadow-xl" data-key="modal-submit">Send</button>
+                    </div>
+                    <p id="requestTechSuccess" class="hidden text-sm text-green-700" data-key="modal-success">Thanks! We will reach out soon.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+	            ru: {
+	                "page-title": "BIO-RED | Инновации в переработке красного шлама",
+	                "nav-mission": "Миссия", "nav-process": "Процесс", "nav-products": "Продукция", "nav-faq": "Вопросы", "nav-cta": "ЗАПРОС ТЕХНОЛОГИИ",
+	                "hero-title-1": "Превращаем", "hero-title-highlight": "промышленные отходы", "hero-title-2": "в ценные ресурсы",
+                "hero-desc": "Инновационное подразделение BIO-RED внедряет биотехнологии для очистки красного шлама и извлечения металлов высокой чистоты.",
+                "stat-1": "Извлечение<br>Иттрия (Y)", "stat-2": "Нейтрализация<br>Натрия (Na)",
+                "proc-title": "Цикл трансформации",
+                "step-1-title": "Сбор шлама", "step-1-desc": "Приемка отходов Bayer-процесса с высоким содержанием щелочи.",
+                "step-2-title": "Био-реакция", "step-2-desc": "Введение штамма Sb. thermosulfidooxidans для генерации кислоты.",
+                "step-3-title": "Экстракция", "step-3-desc": "Селективное вымывание Al, Ce, Sc и Y в контролируемой среде.",
+                "step-4-title": "Рециклинг", "step-4-desc": "Получение очищенного грунта для строительства и чистых металлов.",
+                "prod-title": "Редкоземельные ресурсы для будущего",
+                "prod-desc": "Мы не просто очищаем отходы — мы добываем критически важные компоненты для современной электроники и зеленой энергетики.",
+                "metal-1": "Скандий", "metal-1-use": "Авиастроение и лазеры",
+	                "metal-2": "Церий", "metal-2-use": "Катализаторы и стекло",
+	                "metal-3": "Иттрий", "metal-3-use": "Сверхпроводники и LED",
+	                "prod-eco-gravel": "Эко-гравий",
+	                "metal-4-use": "Безопасное строительство",
+                "quote": "«Технология BIO-RED позволяет сократить углеродный след производства алюминия на 18% за счет полной переработки шлама.»",
+                "quote-author": "Профессор Цзиньлань Ся", "quote-inst": "Центральный Южный университет, Changsha",
+                "faq-title": "Часто задаваемые вопросы",
+                "faq-1-q": "Безопасны ли используемые бактерии?", "faq-1-a": "Да, Sb. thermosulfidooxidans — природные микроорганизмы, активные только внутри реакторов.",
+                "faq-2-q": "Минимальный объем?", "faq-2-a": "Принимаем заказы от 100 единиц. Работаем с сырьем заказчика или закупаем сами.",
+                "faq-3-q": "Сколько длится цикл?", "faq-3-a": "Стандартный цикл биовыщелачивания занимает от 7 до 14 дней.",
+                "faq-4-q": "Какова чистота металлов?", "faq-4-a": "Технология позволяет достичь чистоты 99.5% – 99.9% для оксидов скандия и иттрия.",
+                "faq-5-q": "Есть ли мобильные установки?", "faq-5-a": "Да, мы предоставляем модульные станции для развертывания прямо на местах хранения шлама.",
+                "faq-6-q": "Рентабелен ли процесс?", "faq-6-a": "Стоимость извлечения РЗМ в сочетании с нейтрализацией отходов делает процесс высокоприбыльным.",
+	                "footer-desc": "Лидеры в биометаллургии с 2018 года.", "footer-contacts": "Контакты", "footer-news": "Рассылка", "footer-map": "Карта",
+	                "footer-email": "Email: tech@bio-red.com", "footer-phone": "Телефон: —", "footer-lab": "Лаборатория: Чанша, Хунань, КНР", "footer-address": "Адрес: —", "footer-email-placeholder": "E-mail",
+                    "modal-title": "Запрос технологии",
+                    "modal-desc": "Оставьте e-mail — и мы свяжемся с вами.",
+                    "modal-email-label": "E-mail",
+                    "modal-email-placeholder": "Введите e-mail",
+                    "modal-email-error": "Введите корректный e-mail.",
+                    "modal-cancel": "Отмена",
+                    "modal-submit": "Отправить",
+                    "modal-success": "Спасибо! Мы скоро свяжемся с вами."
+	            },
+	            en: {
+	                "page-title": "BIO-RED | Innovations in Red Mud Processing",
+	                "nav-mission": "Mission", "nav-process": "Process", "nav-products": "Products", "nav-faq": "FAQ", "nav-cta": "REQUEST TECH",
+	                "hero-title-1": "Transforming", "hero-title-highlight": "industrial waste", "hero-title-2": "into valuable resources",
+                "hero-desc": "The BIO-RED innovation division implements biotechnologies for red mud treatment and high-purity metal extraction.",
+                "stat-1": "Yttrium (Y)<br>Recovery", "stat-2": "Sodium (Na)<br>Neutralization",
+                "proc-title": "Transformation Cycle",
+                "step-1-title": "Sludge Collection", "step-1-desc": "Acceptance of Bayer process waste with high alkaline content.",
+                "step-2-title": "Bio-Reaction", "step-2-desc": "Introduction of Sb. thermosulfidooxidans strain for acid generation.",
+                "step-3-title": "Extraction", "step-3-desc": "Selective leaching of Al, Ce, Sc, and Y in a controlled environment.",
+                "step-4-title": "Recycling", "step-4-desc": "Producing purified soil for construction and high-purity metals.",
+                "prod-title": "Rare Earth Resources for the Future",
+                "prod-desc": "We don't just clean waste — we extract critical components for modern electronics and green energy.",
+                "metal-1": "Scandium", "metal-1-use": "Aerospace & Lasers",
+	                "metal-2": "Cerium", "metal-2-use": "Catalysts & Glass",
+	                "metal-3": "Yttrium", "metal-3-use": "Superconductors & LED",
+	                "prod-eco-gravel": "Eco-Gravel",
+	                "metal-4-use": "Eco-Safe Construction",
+                "quote": "«BIO-RED technology reduces the carbon footprint of aluminum production by 18% through total red mud recycling.»",
+                "quote-author": "Professor Jinlan Xia", "quote-inst": "Central South University, Changsha",
+                "faq-title": "Frequently Asked Questions",
+                "faq-1-q": "Are the bacteria safe?", "faq-1-a": "Yes, Sb. thermosulfidooxidans are natural microorganisms active only within bioreactors.",
+                "faq-2-q": "Minimum volume?", "faq-2-a": "We handle orders starting from 100 units/tons. We work with client material or procure it ourselves.",
+                "faq-3-q": "How long does one cycle take?", "faq-3-a": "A standard bio-leaching cycle takes 7 to 14 days depending on the mineral composition.",
+                "faq-4-q": "What is the purity of extracted metals?", "faq-4-a": "Our technology allows achieving a purity level of 99.5% to 99.9% for scandium and yttrium oxides.",
+                "faq-5-q": "Do you offer mobile processing units?", "faq-5-a": "Yes, we provide modular processing stations that can be deployed directly at the storage site.",
+                "faq-6-q": "Is the process economically viable?", "faq-6-a": "The cost of rare earth extraction combined with waste neutralization makes the process highly profitable.",
+	                "footer-desc": "Leaders in biometallurgy since 2018.", "footer-contacts": "Contacts", "footer-news": "Newsletter", "footer-map": "Map",
+	                "footer-email": "Email: tech@bio-red.com", "footer-phone": "Phone: —", "footer-lab": "Laboratory: Changsha, Hunan, PRC", "footer-address": "Address: —", "footer-email-placeholder": "E-mail",
+                    "modal-title": "Request technology",
+                    "modal-desc": "Leave your email and we will contact you.",
+                    "modal-email-label": "E-mail",
+                    "modal-email-placeholder": "Enter your e-mail",
+                    "modal-email-error": "Please enter a valid email.",
+                    "modal-cancel": "Cancel",
+                    "modal-submit": "Send",
+                    "modal-success": "Thanks! We will reach out soon."
+	            },
+	            me: {
+	                "page-title": "BIO-RED | Inovacije u preradi crvenog mulja",
+	                "nav-mission": "Misija", "nav-process": "Proces", "nav-products": "Proizvodi", "nav-faq": "Pitanja", "nav-cta": "ZAHTJEV TEHNOLOGIJE",
+	                "hero-title-1": "Pretvaramo", "hero-title-highlight": "industrijski otpad", "hero-title-2": "u vrijedne resurse",
+                "hero-desc": "Inovaciono odjeljenje BIO-RED uvodi biotehnologije za prečišćavanje crvenog mulja i ekstrakciju metala visoke čistoće.",
+                "stat-1": "Ekstrakcija<br>Itrijuma (Y)", "stat-2": "Neutralizacija<br>Natrijuma (Na)",
+                "proc-title": "Ciklus transformacije",
+                "step-1-title": "Sakupljanje mulja", "step-1-desc": "Prijem otpada iz Bayerovog procesa sa visokim sadržajem alkalija.",
+                "step-2-title": "Bio-reakcija", "step-2-desc": "Uvođenje soja Sb. thermosulfidooxidans za generisanje kiseline.",
+                "step-3-title": "Ekstrakcija", "step-3-desc": "Selektivno ispiranje Al, Ce, Sc i Y u kontrolisanom okruženju.",
+                "step-4-title": "Reciklaža", "step-4-desc": "Dobijanje očišćenog zemljišta za građevinarstvo i čistih metala.",
+                "prod-title": "Rijetki resursi za budućnost",
+                "prod-desc": "Mi ne čistimo samo otpad — mi vadimo kritične komponente za modernu elektroniku i zelenu energiju.",
+                "metal-1": "Skandijum", "metal-1-use": "Avijacija i laseri",
+	                "metal-2": "Cerijum", "metal-2-use": "Katalizatori i staklo",
+	                "metal-3": "Itrijum", "metal-3-use": "Superprovodnici i LED",
+	                "prod-eco-gravel": "Eko-šljunak",
+	                "metal-4-use": "Ekološka gradnja",
+                "quote": "«BIO-RED tehnologija smanjuje ugljenični otisak proizvodnje aluminijuma za 18% kroz potpunu reciklažu mulja.»",
+                "quote-author": "Profesor Jinlan Xia", "quote-inst": "Central South University, Changsha",
+                "faq-title": "Često postavljana pitanja",
+                "faq-1-q": "Da li su bakterije bezbjedne?", "faq-1-a": "Da, Sb. thermosulfidooxidans su prirodni mikroorganizmi aktivni samo unutar bioreaktora.",
+                "faq-2-q": "Minimalni obim?", "faq-2-a": "Prihvatamo porudžbine od 100 jedinica. Radimo sa materijalom kupca ili ga sami nabavljamo.",
+                "faq-3-q": "Koliko traje jedan ciklus?", "faq-3-a": "Standardni ciklus bio-ispiranja traje od 7 do 14 dana u zavisnosti od sastava mulja.",
+                "faq-4-q": "Kolika je čistoća metala?", "faq-4-a": "Tehnologija omogućava dostizanje čistoće od 99.5% do 99.9% za okside skandijuma i itrijuma.",
+                "faq-5-q": "Nudite li mobilne jedinice?", "faq-5-a": "Da, nudimo modularne stanice koje se mogu postaviti direktno na mjestu skladištenja mulja.",
+                "faq-6-q": "Da li je proces ekonomski isplativ?", "faq-6-a": "Cijena ekstrakcije metala u kombinaciji sa neutralizacijom otpada čini proces veoma profitabilnim.",
+	                "footer-desc": "Lideri u biometalurgiji od 2018. godine.", "footer-contacts": "Kontakti", "footer-news": "Bilten", "footer-map": "Mapa",
+	                "footer-email": "Email: tech@bio-red.com", "footer-phone": "Telefon: —", "footer-lab": "Laboratorija: Changsha, Hunan, NR Kina", "footer-address": "Adresa: —", "footer-email-placeholder": "E-mail",
+                    "modal-title": "Zahtjev tehnologije",
+                    "modal-desc": "Ostavite e-mail i kontaktiraćemo vas.",
+                    "modal-email-label": "E-mail",
+                    "modal-email-placeholder": "Unesite e-mail",
+                    "modal-email-error": "Unesite ispravan e-mail.",
+                    "modal-cancel": "Otkaži",
+                    "modal-submit": "Pošalji",
+                    "modal-success": "Hvala! Uskoro ćemo vas kontaktirati."
+	            },
+	            zh: {
+	                "page-title": "BIO-RED｜赤泥处理与资源化创新",
+	                "nav-mission": "使命", "nav-process": "流程", "nav-products": "产品", "nav-faq": "常见问题", "nav-cta": "技术咨询",
+	                "hero-title-1": "将", "hero-title-highlight": "工业废弃物", "hero-title-2": "转化为有价值的资源",
+	                "hero-desc": "BIO-RED 创新部门采用生物技术处理赤泥，并提取高纯度金属。",
+	                "stat-1": "钇 (Y)<br>回收率", "stat-2": "钠 (Na)<br>中和率",
+	                "proc-title": "转化循环",
+	                "step-1-title": "赤泥接收", "step-1-desc": "接收碱含量较高的拜耳法工艺废弃物。",
+	                "step-2-title": "生物反应", "step-2-desc": "引入 Sb. thermosulfidooxidans 菌株以生成酸。",
+	                "step-3-title": "浸出提取", "step-3-desc": "在受控环境中选择性浸出 Al、Ce、Sc 与 Y。",
+	                "step-4-title": "循环利用", "step-4-desc": "产出可用于建筑的净化土壤以及高纯度金属。",
+	                "prod-title": "面向未来的稀土资源",
+	                "prod-desc": "我们不仅净化废弃物——还提取现代电子与绿色能源所需的关键材料。",
+	                "metal-1": "钪", "metal-1-use": "航空航天与激光",
+	                "metal-2": "铈", "metal-2-use": "催化剂与玻璃",
+	                "metal-3": "钇", "metal-3-use": "超导体与 LED",
+	                "prod-eco-gravel": "环保砾石",
+	                "metal-4-use": "安全环保建材",
+	                "quote": "「BIO-RED 技术通过实现赤泥的完全循环利用，可将铝生产的碳足迹降低 18%。」",
+	                "quote-author": "夏金兰教授", "quote-inst": "中南大学（长沙）",
+	                "faq-title": "常见问题",
+	                "faq-1-q": "所使用的细菌安全吗？", "faq-1-a": "安全。Sb. thermosulfidooxidans 为天然微生物，仅在生物反应器内活性作用。",
+	                "faq-2-q": "最小处理量是多少？", "faq-2-a": "我们接受从 100 吨/单位起的订单。可使用客户原料，也可由我们采购。",
+	                "faq-3-q": "一个周期需要多久？", "faq-3-a": "标准生物浸出周期为 7–14 天，取决于赤泥的矿物组成。",
+	                "faq-4-q": "提取金属的纯度是多少？", "faq-4-a": "技术可实现 99.5%–99.9% 的纯度（钪、钇氧化物）。",
+	                "faq-5-q": "是否提供移动式处理装置？", "faq-5-a": "提供。我们可提供模块化处理站，可直接部署在赤泥堆场。",
+	                "faq-6-q": "工艺是否具有经济可行性？", "faq-6-a": "稀土提取与废物中和相结合，使其相较传统处置更具盈利性。",
+	                "footer-desc": "自 2018 年起引领生物冶金。", "footer-contacts": "联系方式", "footer-news": "订阅通讯", "footer-map": "地图",
+	                "footer-email": "邮箱：tech@bio-red.com", "footer-phone": "电话：—", "footer-lab": "实验室：中国湖南长沙", "footer-address": "地址：—", "footer-email-placeholder": "邮箱",
+                    "modal-title": "技术咨询",
+                    "modal-desc": "请留下邮箱，我们会与您联系。",
+                    "modal-email-label": "邮箱",
+                    "modal-email-placeholder": "请输入邮箱",
+                    "modal-email-error": "请输入有效的邮箱。",
+                    "modal-cancel": "取消",
+                    "modal-submit": "发送",
+                    "modal-success": "谢谢！我们会尽快联系您。"
+	            }
+	        };
+
+        function setLang(lang) {
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${lang}`).classList.add('active');
+
+            if (translations[lang] && translations[lang]["page-title"]) {
+                document.title = translations[lang]["page-title"];
+            }
+            
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-placeholder-key]').forEach(el => {
+                const key = el.getAttribute('data-placeholder-key');
+                if (translations[lang][key]) {
+                    el.setAttribute('placeholder', translations[lang][key]);
+                }
+            });
+
+            document.querySelectorAll('[data-title-key]').forEach(el => {
+                const key = el.getAttribute('data-title-key');
+                if (translations[lang][key]) {
+                    el.setAttribute('title', translations[lang][key].replace(/<br\s*\/?\s*>/gi, ' '));
+                }
+            });
+
+            document.documentElement.lang = lang;
+        }
+
+        // Animation logic
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.liquid-glass').forEach(el => {
+            el.style.opacity = "0";
+            el.style.transform = "translateY(30px)";
+            el.style.transition = "all 0.8s cubic-bezier(0.23, 1, 0.32, 1)";
+            observer.observe(el);
+        });
+
+        // Request tech modal
+        const requestTechBtn = document.getElementById('request-tech-btn');
+        const requestTechModal = document.getElementById('requestTechModal');
+        const requestTechBackdrop = document.getElementById('requestTechBackdrop');
+        const requestTechClose = document.getElementById('requestTechClose');
+        const requestTechCancel = document.getElementById('requestTechCancel');
+        const requestTechForm = document.getElementById('requestTechForm');
+        const requestTechEmail = document.getElementById('requestTechEmail');
+        const requestTechError = document.getElementById('requestTechError');
+        const requestTechSuccess = document.getElementById('requestTechSuccess');
+        let requestTechPreviouslyFocused = null;
+
+        function openRequestTechModal() {
+            requestTechPreviouslyFocused = document.activeElement;
+            requestTechModal.classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+            requestTechError.classList.add('hidden');
+            requestTechSuccess.classList.add('hidden');
+            requestTechForm.reset();
+            setTimeout(() => requestTechEmail.focus(), 0);
+        }
+
+        function closeRequestTechModal() {
+            requestTechModal.classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+            if (requestTechPreviouslyFocused && typeof requestTechPreviouslyFocused.focus === 'function') {
+                requestTechPreviouslyFocused.focus();
+            }
+        }
+
+        requestTechBtn?.addEventListener('click', openRequestTechModal);
+        requestTechBackdrop?.addEventListener('click', closeRequestTechModal);
+        requestTechClose?.addEventListener('click', closeRequestTechModal);
+        requestTechCancel?.addEventListener('click', closeRequestTechModal);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key !== 'Escape') return;
+            if (!requestTechModal || requestTechModal.classList.contains('hidden')) return;
+            closeRequestTechModal();
+        });
+
+        requestTechForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            requestTechError.classList.add('hidden');
+            requestTechSuccess.classList.add('hidden');
+
+            const email = requestTechEmail.value.trim();
+            const isValid = requestTechEmail.checkValidity() && email.length > 0;
+            if (!isValid) {
+                requestTechError.classList.remove('hidden');
+                requestTechEmail.focus();
+                return;
+            }
+
+            requestTechSuccess.classList.remove('hidden');
+        });
+
+        // По умолчанию ставим английский
+        window.onload = () => setLang('en');
+    </script>
+</body>
+</html>
