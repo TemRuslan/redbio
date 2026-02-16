@@ -751,5 +751,23 @@ const translations = {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
+        // Header links: when a section doesn't exist on the current page, route to home page
+        (function fixHeaderSectionLinks() {
+            const nav = document.getElementById('site-logo')?.closest('nav');
+            const mobile = document.getElementById('mobile-menu-panel');
+
+            [nav, mobile].forEach((root) => {
+                if (!root) return;
+                root.querySelectorAll('a[href^="#"]').forEach((a) => {
+                    const href = a.getAttribute('href') || '';
+                    if (!href.startsWith('#')) return;
+                    const id = href.slice(1);
+                    if (!id) return;
+                    if (document.getElementById(id)) return;
+                    a.setAttribute('href', `index.html${href}`);
+                });
+            });
+        })();
+
         // По умолчанию ставим английский
         window.addEventListener('load', () => setLang('en'));

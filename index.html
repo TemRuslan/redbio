@@ -16,7 +16,6 @@
     <meta name="theme-color" content="#ffffff">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <script src="assets/partials.js"></script>
     <style>
         :root {
             --primary: #bc4749; 
@@ -151,10 +150,8 @@
     <div class="blob w-[500px] h-[500px] bg-red-100 top-[-20%] left-[-10%]"></div>
     <div class="blob w-[400px] h-[400px] bg-green-50 bottom-[-10%] right-[-5%]" style="animation-delay: -7s;"></div>
 
-		    <div id="site-header"></div>
-		    <script>
-		        injectPartialSync('site-header', 'partials/header.html');
-		    </script>
+			    <div id="site-header"></div>
+			    <script src="partials/header.include.js" data-target="site-header" data-url="partials/header.html"></script>
 	
 	    <!-- Hero Section -->
 	    <section id="share" class="pt-48 pb-20 px-6" style="scroll-margin-top: 120px;">
@@ -379,10 +376,8 @@
         </div>
     </section>
 
-	    <div id="site-footer"></div>
-	    <script>
-	        injectPartialSync('site-footer', 'partials/footer.html');
-	    </script>
+		    <div id="site-footer"></div>
+		    <script src="partials/footer.include.js" data-target="site-footer" data-url="partials/footer.html"></script>
 
     <!-- Request Tech Modal -->
     <div id="requestTechModal" class="fixed inset-0 z-[60] hidden" role="dialog" aria-modal="true" aria-labelledby="requestTechTitle">
