@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIO-RED | Technology</title>
+    <link rel="icon" href="favicon/favicon.ico" sizes="any">
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#bc4749">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-config" content="favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="assets/partials.js"></script>
+    <style>
+        :root {
+            --primary: #bc4749;
+            --secondary: #6a994e;
+            --glass: rgba(255, 255, 255, 0.12);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #fef8f8 100%);
+            min-height: 100vh;
+            color: #1a1a1a;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .liquid-glass {
+            background: var(--glass);
+            backdrop-filter: blur(16px) saturate(160%);
+            -webkit-backdrop-filter: blur(16px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 28px;
+            box-shadow: 0 10px 40px -10px rgba(188, 71, 73, 0.12);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .liquid-glass:hover {
+            background: rgba(255, 255, 255, 0.22);
+            box-shadow: 0 20px 60px -15px rgba(188, 71, 73, 0.18);
+        }
+
+        .hover-scale:hover {
+            transform: scale(1.02);
+        }
+
+        .blob {
+            position: fixed;
+            z-index: -1;
+            filter: blur(80px);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: move 25s infinite alternate ease-in-out;
+        }
+
+        @keyframes move {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(150px, 100px) scale(1.2); }
+        }
+
+        .hero-text {
+            background: linear-gradient(90deg, #bc4749, #6a994e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        .lang-btn.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        /* Process slider */
+        .process-track {
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .process-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        .process-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 9999px;
+            background: rgba(0, 0, 0, 0.18);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            transition: transform 160ms ease, background 160ms ease, opacity 160ms ease;
+            opacity: 0.65;
+        }
+
+        .process-dot[data-active="true"] {
+            background: rgba(188, 71, 73, 0.9);
+            border-color: rgba(188, 71, 73, 0.35);
+            opacity: 1;
+            transform: scale(1.15);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="blob w-[500px] h-[500px] bg-red-100 top-[-20%] left-[-10%]"></div>
+    <div class="blob w-[400px] h-[400px] bg-green-50 bottom-[-10%] right-[-5%]" style="animation-delay: -7s;"></div>
+
+		    <div id="site-header"></div>
+		    <script>
+		        injectPartialSync('site-header', 'partials/header.html');
+		    </script>
+	
+	    <!-- Header -->
+	    <header class="pt-44 pb-10 px-6">
+	        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight tracking-tight">
+                <span data-key="nav-tech">Technology</span>
+                <span class="hero-text">BIO‑RED</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-500 max-w-4xl mx-auto font-light" data-key="tech-desc">
+                BIO‑RED combines sulfur bio‑oxidation and controlled bioleaching to simultaneously dealkalize red mud and transfer selected metals into solution.
+            </p>
+        </div>
+    </header>
+
+    <!-- Блок: Миссия -->
+    <section id="mission" class="py-24 px-6 bg-white/40">
+        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
+            <div class="space-y-8">
+                <div class="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                    <span class="w-2 h-2 rounded-full bg-[#bc4749]"></span>
+                    <span data-key="about-kicker">Research-driven mission</span>
+                </div>
+                <h2 class="text-4xl font-bold" data-key="about-title">Why red mud matters</h2>
+                <p class="text-gray-600 leading-relaxed" data-key="about-desc">
+                    Red mud (bauxite residue) is a highly alkaline, polymetallic by-product of alumina production. Its storage creates long-term risks for soil and water, while the same material contains recoverable value.
+                </p>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div class="liquid-glass p-6">
+                        <h3 class="font-bold text-xs uppercase tracking-widest mb-2" data-key="about-point-1-title">Hazard profile</h3>
+                        <p class="text-sm text-gray-600" data-key="about-point-1-desc">High alkalinity and fine particles can cause dust and alkaline leachate issues.</p>
+                    </div>
+                    <div class="liquid-glass p-6">
+                        <h3 class="font-bold text-xs uppercase tracking-widest mb-2" data-key="about-point-2-title">Resource potential</h3>
+                        <p class="text-sm text-gray-600" data-key="about-point-2-desc">Red mud can contain Al, Fe, Ti and rare earth elements that are relevant for modern supply chains.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="liquid-glass p-10">
+                <h3 class="text-xl font-extrabold tracking-tight" data-key="about-what-title">What BIO‑RED does</h3>
+                <p class="mt-3 text-sm text-gray-600 leading-relaxed" data-key="about-what-desc">
+                    We develop biometallurgical routes that dealkalize red mud and mobilize target metals under controlled reactor conditions.
+                </p>
+                <ul class="mt-6 space-y-3 text-sm text-gray-700">
+                    <li class="flex gap-3">
+                        <span class="w-7 h-7 rounded-full bg-white/70 border border-gray-200 grid place-items-center font-bold text-xs text-[#bc4749]">1</span>
+                        <span data-key="about-what-1">Decrease alkalinity to enable safer handling and downstream utilization.</span>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="w-7 h-7 rounded-full bg-white/70 border border-gray-200 grid place-items-center font-bold text-xs text-[#6a994e]">2</span>
+                        <span data-key="about-what-2">Extract valuable metals (Al, Ce, Y and others) by bio-assisted leaching.</span>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="w-7 h-7 rounded-full bg-white/70 border border-gray-200 grid place-items-center font-bold text-xs text-blue-600">3</span>
+                        <span data-key="about-what-3">Validate results with standard analytics (ICP, SEM, XRD) and publish evidence.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Блок: Technology -->
+    <section id="technology" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4" data-key="tech-title">Technology overview</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto" data-key="tech-desc">
+                    BIO‑RED combines sulfur bio‑oxidation and controlled bioleaching to simultaneously dealkalize red mud and transfer selected metals into solution.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6 items-start">
+                <div class="liquid-glass p-8 lg:col-span-2">
+                    <h3 class="font-bold uppercase text-xs tracking-widest text-gray-500" data-key="tech-exec-title">Executive summary</h3>
+                    <p class="mt-3 text-sm text-gray-700 leading-relaxed" data-key="tech-exec-desc">
+                        Elemental sulfur (S⁰) is biologically oxidized by sulfur‑oxidizing bacteria (e.g., Sb. thermosulfidooxidans), generating acidity (H⁺). Lower pH enables dissolution of alkaline components and helps mobilize valuable metals.
+                    </p>
+                    <div class="mt-8 grid sm:grid-cols-2 gap-4">
+                        <div class="p-6 bg-white/60 rounded-3xl border border-gray-100">
+                            <h4 class="font-bold text-xs uppercase tracking-widest mb-2" data-key="tech-mech-title">Mechanism</h4>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                <span data-key="tech-mech-desc">S⁰ bio‑oxidation → sulfate + H⁺ (biogenic acidity) → pH decrease → dealkalization + metal leaching.</span>
+                                <sup class="ml-1 text-xs align-super text-gray-400"><a href="index.html#paper-fmicb" class="hover:text-[#bc4749]">[1]</a></sup>
+                            </p>
+                        </div>
+                        <div class="p-6 bg-white/60 rounded-3xl border border-gray-100">
+                            <h4 class="font-bold text-xs uppercase tracking-widest mb-2" data-key="tech-controls-title">What we control</h4>
+                            <p class="text-sm text-gray-700 leading-relaxed" data-key="tech-controls-desc">
+                                Aeration, S⁰:RM ratio, temperature, pH/Eh and residence time are tuned to feedstock and target metals.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="liquid-glass p-8">
+                    <div class="flex items-start justify-between gap-4">
+                        <h3 class="font-bold uppercase text-xs tracking-widest text-gray-500" data-key="tech-window-title">Example window</h3>
+                        <a href="index.html#paper-fmicb" class="text-xs font-bold text-gray-400 hover:text-[#bc4749] transition">[1]</a>
+                    </div>
+                    <p class="mt-3 text-sm text-gray-700 leading-relaxed" data-key="tech-window-desc">
+                        Literature examples (not a universal recipe). Actual values depend on mineralogy, solids content and downstream flowsheet.
+                    </p>
+                    <div class="mt-6 overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="text-xs uppercase tracking-widest text-gray-400">
+                                <tr>
+                                    <th class="text-left py-2 pr-4" data-key="tech-table-param">Parameter</th>
+                                    <th class="text-left py-2" data-key="tech-table-example">Example</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-700">
+                                <tr class="border-t border-gray-100">
+                                    <td class="py-3 pr-4 font-semibold" data-key="tech-row-temp">Temperature</td>
+                                    <td class="py-3">45&nbsp;°C</td>
+                                </tr>
+                                <tr class="border-t border-gray-100">
+                                    <td class="py-3 pr-4 font-semibold" data-key="tech-row-ratio">S⁰:RM mass ratio</td>
+                                    <td class="py-3">2:1</td>
+                                </tr>
+                                <tr class="border-t border-gray-100">
+                                    <td class="py-3 pr-4 font-semibold" data-key="tech-row-air">Aeration</td>
+                                    <td class="py-3">1&nbsp;L/min</td>
+                                </tr>
+                                <tr class="border-t border-gray-100">
+                                    <td class="py-3 pr-4 font-semibold" data-key="tech-row-analytics">Analytics</td>
+                                    <td class="py-3" data-key="tech-row-analytics-val">ICP, SEM, XRD, STXM</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Блок: Evidence -->
+    <section id="evidence" class="py-24 px-6 bg-white/40">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4" data-key="evidence-title">Evidence & key results</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto" data-key="evidence-desc">
+                    Selected peer‑reviewed findings that support and contextualize the BIO‑RED approach.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6 items-stretch">
+                <div class="liquid-glass p-8">
+                    <div class="flex items-start justify-between gap-4">
+                        <h3 class="font-bold" data-key="evidence-1-title">Bioleaching in controlled reactors</h3>
+                        <a href="index.html#paper-fmicb" class="text-xs font-bold text-gray-400 hover:text-[#bc4749] transition">[1]</a>
+                    </div>
+                    <ul class="mt-4 space-y-2 text-sm text-gray-700">
+                        <li data-key="evidence-1-li1">Reported metal recoveries up to Al 89%, Ce 84%, Y 91% under selected conditions.</li>
+                        <li data-key="evidence-1-li2">Effective dealkalization via high dissolution rates of Na/K/Ca (&gt;95%).</li>
+                        <li data-key="evidence-1-li3">Monitoring and validation via ICP analysis and solid-phase methods (SEM, XRD, STXM).</li>
+                    </ul>
+                </div>
+
+                <div class="liquid-glass p-8">
+                    <div class="flex items-start justify-between gap-4">
+                        <h3 class="font-bold" data-key="evidence-2-title">Indigenous alkaliphiles as bio-tools</h3>
+                        <a href="index.html#paper-elsevier" class="text-xs font-bold text-gray-400 hover:text-[#bc4749] transition">[2]</a>
+                    </div>
+                    <ul class="mt-4 space-y-2 text-sm text-gray-700">
+                        <li data-key="evidence-2-li1">Alkali‑halophilic isolates tolerate pH 7–11 and NaCl up to 3&nbsp;M.</li>
+                        <li data-key="evidence-2-li2">Reported pH neutralization of 10% red mud within 24&nbsp;h for selected isolates.</li>
+                        <li data-key="evidence-2-li3">Genomic analysis (RAST) discusses stress tolerance and metal resistance mechanisms.</li>
+                    </ul>
+                </div>
+
+                <div class="liquid-glass p-8">
+                    <div class="flex items-start justify-between gap-4">
+                        <h3 class="font-bold" data-key="evidence-3-title">Dealkalization methods map</h3>
+                        <a href="index.html#paper-mdpi" class="text-xs font-bold text-gray-400 hover:text-[#bc4749] transition">[3]</a>
+                    </div>
+                    <ul class="mt-4 space-y-2 text-sm text-gray-700">
+                        <li data-key="evidence-3-li1">Critical review of red mud hazards and dealkalization routes.</li>
+                        <li data-key="evidence-3-li2">Compares water washing, acid neutralization, ion precipitation/replacement and metallurgical methods.</li>
+                        <li data-key="evidence-3-li3">Helps position biotechnological approaches within the broader process landscape.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Блок: Процесс (слайдер) -->
+    <section id="process" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4" data-key="proc-title">Transformation Cycle</h2>
+                <div class="h-1 w-20 bg-[#bc4749] mx-auto"></div>
+            </div>
+
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center">
+                    <button type="button" data-process-prev class="hover-scale liquid-glass px-4 py-3 bg-white/70 text-gray-700 text-sm font-bold" aria-label="Previous step">‹</button>
+                </div>
+                <div class="absolute inset-y-0 right-0 flex items-center">
+                    <button type="button" data-process-next class="hover-scale liquid-glass px-4 py-3 bg-white/70 text-gray-700 text-sm font-bold" aria-label="Next step">›</button>
+                </div>
+
+                <div data-process-track class="process-track flex gap-6 overflow-x-auto px-2 py-2 scroll-px-2">
+                    <article data-process-slide class="liquid-glass p-8 snap-center shrink-0 w-[86%] sm:w-[70%] md:w-[48%] lg:w-[32%] bg-white/60">
+                        <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mb-6 border border-red-100 font-bold text-[#bc4749]">1</div>
+                        <h3 class="font-bold mb-3 uppercase text-xs tracking-wider" data-key="step-1-title">Sludge Collection</h3>
+                        <p class="text-sm text-gray-500" data-key="step-1-desc">Acceptance of Bayer process waste with high alkaline content.</p>
+                    </article>
+                    <article data-process-slide class="liquid-glass p-8 snap-center shrink-0 w-[86%] sm:w-[70%] md:w-[48%] lg:w-[32%] bg-white/60">
+                        <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center mb-6 border border-green-100 font-bold text-[#6a994e]">2</div>
+                        <h3 class="font-bold mb-3 uppercase text-xs tracking-wider" data-key="step-2-title">Bio-Reaction</h3>
+                        <p class="text-sm text-gray-500" data-key="step-2-desc">Introduction of Sb. thermosulfidooxidans strain for acid generation.</p>
+                    </article>
+                    <article data-process-slide class="liquid-glass p-8 snap-center shrink-0 w-[86%] sm:w-[70%] md:w-[48%] lg:w-[32%] bg-white/60">
+                        <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-6 border border-blue-100 font-bold text-blue-500">3</div>
+                        <h3 class="font-bold mb-3 uppercase text-xs tracking-wider" data-key="step-3-title">Extraction</h3>
+                        <p class="text-sm text-gray-500" data-key="step-3-desc">Selective leaching of Al, Ce, Sc, and Y in a controlled environment.</p>
+                    </article>
+                    <article data-process-slide class="liquid-glass p-8 snap-center shrink-0 w-[86%] sm:w-[70%] md:w-[48%] lg:w-[32%] bg-white/60">
+                        <div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mb-6 border border-gray-100 font-bold text-gray-500">4</div>
+                        <h3 class="font-bold mb-3 uppercase text-xs tracking-wider" data-key="step-4-title">Recycling</h3>
+                        <p class="text-sm text-gray-500" data-key="step-4-desc">Producing purified soil for construction and high-purity metals.</p>
+                    </article>
+                </div>
+
+                <div class="mt-6 flex items-center justify-center gap-2" data-process-dots></div>
+            </div>
+
+            <div class="mt-10 grid lg:grid-cols-3 gap-6">
+                <div class="liquid-glass p-8 lg:col-span-2">
+                    <div class="flex items-start justify-between gap-4">
+                        <h3 class="font-bold uppercase text-xs tracking-widest text-gray-500" data-key="proc-notes-title">Process controls & analytics</h3>
+                        <a href="index.html#paper-fmicb" class="text-xs font-bold text-gray-400 hover:text-[#bc4749] transition">[1]</a>
+                    </div>
+                    <p class="mt-3 text-sm text-gray-700 leading-relaxed" data-key="proc-notes-desc">
+                        Key parameters are measured and adjusted to match the mineral composition of each feedstock and the target metals.
+                    </p>
+                    <div class="mt-6 grid sm:grid-cols-2 gap-4 text-sm text-gray-700">
+                        <div class="p-5 bg-white/60 rounded-3xl border border-gray-100">
+                            <p class="font-bold text-xs uppercase tracking-widest text-gray-500 mb-2" data-key="proc-controls-title">Controls</p>
+                            <p data-key="proc-controls-desc">pH/Eh, aeration, S⁰ dosing, temperature, mixing and residence time.</p>
+                        </div>
+                        <div class="p-5 bg-white/60 rounded-3xl border border-gray-100">
+                            <p class="font-bold text-xs uppercase tracking-widest text-gray-500 mb-2" data-key="proc-analytics-title">Analytics</p>
+                            <p data-key="proc-analytics-desc">ICP for dissolved elements + SEM/XRD (and related methods) for solid phases.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="liquid-glass p-8">
+                    <h3 class="font-bold uppercase text-xs tracking-widest text-gray-500" data-key="proc-note2-title">Scientific note</h3>
+                    <p class="mt-3 text-sm text-gray-700 leading-relaxed" data-key="proc-note2-desc">
+                        Reported values are literature examples. Industrial performance depends on feedstock variability, solids content, and downstream purification.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="site-footer"></div>
+    <script>
+        injectPartialSync('site-footer', 'partials/footer.html');
+    </script>
+
+    <!-- Request Tech Modal -->
+    <div id="requestTechModal" class="fixed inset-0 z-[60] hidden" role="dialog" aria-modal="true" aria-labelledby="requestTechTitle">
+        <div id="requestTechBackdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+        <div class="relative h-full w-full flex items-center justify-center p-6">
+            <div class="liquid-glass w-full max-w-lg p-8 bg-white/70">
+                <div class="flex items-start justify-between gap-6">
+                    <div>
+                        <h3 id="requestTechTitle" class="text-xl font-extrabold tracking-tight" data-key="modal-title">Request technology</h3>
+                        <p class="mt-2 text-sm text-gray-600" data-key="modal-desc">Leave your email and we will contact you.</p>
+                    </div>
+                    <button id="requestTechClose" type="button" class="text-gray-500 hover:text-gray-900 transition text-2xl leading-none" aria-label="Close">×</button>
+                </div>
+                <form id="requestTechForm" class="mt-6 space-y-4" novalidate>
+                    <label class="block">
+                        <span class="text-xs font-bold uppercase tracking-widest text-gray-500" data-key="modal-email-label">E-mail</span>
+                        <input
+                            id="requestTechEmail"
+                            type="email"
+                            required
+                            autocomplete="email"
+                            inputmode="email"
+                            placeholder="E-mail"
+                            data-placeholder-key="modal-email-placeholder"
+                            class="mt-2 w-full bg-white/70 border border-gray-200 px-4 py-3 rounded-2xl text-sm focus:ring-1 focus:ring-[#bc4749] focus:outline-none"
+                        >
+                    </label>
+                    <p id="requestTechError" class="hidden text-sm text-[#bc4749]" data-key="modal-email-error">Please enter a valid email.</p>
+                    <div class="flex flex-col sm:flex-row gap-3 sm:justify-end">
+                        <button id="requestTechCancel" type="button" class="px-6 py-3 rounded-2xl text-sm font-bold border border-gray-200 bg-white/60 hover:bg-white/80 transition" data-key="modal-cancel">Cancel</button>
+                        <button type="submit" class="px-6 py-3 rounded-2xl text-sm font-bold text-white bg-[#bc4749] hover:bg-[#a43d3f] transition shadow-xl" data-key="modal-submit">Send</button>
+                    </div>
+                    <p id="requestTechSuccess" class="hidden text-sm text-green-700" data-key="modal-success">Thanks! We will reach out soon.</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/site.js"></script>
+    <script src="assets/technology.js"></script>
+</body>
+</html>

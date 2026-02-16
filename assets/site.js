@@ -608,29 +608,91 @@ const translations = {
 	            observer.observe(el);
 	        }
 
-	        document.querySelectorAll('.liquid-glass').forEach(registerGlassElement);
+		        document.querySelectorAll('.liquid-glass').forEach(registerGlassElement);
 
-        // Request tech modal
-        const requestTechBtn = document.getElementById('request-tech-btn');
-        const requestTechModal = document.getElementById('requestTechModal');
-        const requestTechBackdrop = document.getElementById('requestTechBackdrop');
-        const requestTechClose = document.getElementById('requestTechClose');
-        const requestTechCancel = document.getElementById('requestTechCancel');
-        const requestTechForm = document.getElementById('requestTechForm');
-        const requestTechEmail = document.getElementById('requestTechEmail');
-        const requestTechError = document.getElementById('requestTechError');
-        const requestTechSuccess = document.getElementById('requestTechSuccess');
-        let requestTechPreviouslyFocused = null;
+	        // Mobile menu
+	        (function initMobileMenu() {
+	            const mobileMenuButton = document.getElementById('mobile-menu-button');
+	            const mobileMenuPanel = document.getElementById('mobile-menu-panel');
+	            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+	            const mobileMenuClose = document.getElementById('mobile-menu-close');
 
-        function openRequestTechModal() {
-            requestTechPreviouslyFocused = document.activeElement;
-            requestTechModal.classList.remove('hidden');
-            document.body.classList.add('overflow-hidden');
-            requestTechError.classList.add('hidden');
-            requestTechSuccess.classList.add('hidden');
-            requestTechForm.reset();
-            setTimeout(() => requestTechEmail.focus(), 0);
-        }
+	            if (!mobileMenuButton || !mobileMenuPanel || !mobileMenuOverlay) return;
+
+	            let mobileMenuOpen = false;
+	            let mobileMenuPreviouslyFocused = null;
+
+	            function setMobileMenuOpen(open, opts = {}) {
+	                if (open === mobileMenuOpen) return;
+	                mobileMenuOpen = open;
+
+	                if (open) {
+	                    mobileMenuPreviouslyFocused = document.activeElement;
+	                    mobileMenuOverlay.classList.remove('hidden');
+	                    mobileMenuPanel.classList.remove('translate-x-full');
+	                    mobileMenuPanel.classList.add('translate-x-0');
+	                    mobileMenuPanel.setAttribute('aria-hidden', 'false');
+	                    mobileMenuButton.setAttribute('aria-expanded', 'true');
+	                    document.body.classList.add('overflow-hidden');
+	                    const focusTarget = mobileMenuClose || mobileMenuPanel.querySelector('a, button, [tabindex]:not([tabindex=\"-1\"])');
+	                    setTimeout(() => focusTarget?.focus?.(), 0);
+	                    return;
+	                }
+
+	                mobileMenuOverlay.classList.add('hidden');
+	                mobileMenuPanel.classList.add('translate-x-full');
+	                mobileMenuPanel.classList.remove('translate-x-0');
+	                mobileMenuPanel.setAttribute('aria-hidden', 'true');
+	                mobileMenuButton.setAttribute('aria-expanded', 'false');
+	                document.body.classList.remove('overflow-hidden');
+	                if (opts.restoreFocus !== false && mobileMenuPreviouslyFocused?.focus) {
+	                    mobileMenuPreviouslyFocused.focus();
+	                }
+	                mobileMenuPreviouslyFocused = null;
+	            }
+
+	            function closeMobileMenu(opts) {
+	                setMobileMenuOpen(false, opts);
+	            }
+
+	            window.__closeMobileMenu = closeMobileMenu;
+	            window.__isMobileMenuOpen = () => mobileMenuOpen;
+
+	            mobileMenuButton.addEventListener('click', () => setMobileMenuOpen(!mobileMenuOpen));
+	            mobileMenuOverlay.addEventListener('click', () => closeMobileMenu());
+	            mobileMenuClose?.addEventListener('click', () => closeMobileMenu());
+
+	            mobileMenuPanel.querySelectorAll('[data-mobile-menu-close]').forEach((el) => {
+	                el.addEventListener('click', () => closeMobileMenu());
+	            });
+
+	            document.addEventListener('keydown', (e) => {
+	                if (e.key === 'Escape' && mobileMenuOpen) closeMobileMenu();
+	            });
+	        })();
+
+	        // Request tech modal
+	        const requestTechBtns = document.querySelectorAll('#request-tech-btn,[data-request-tech]');
+	        const requestTechModal = document.getElementById('requestTechModal');
+	        const requestTechBackdrop = document.getElementById('requestTechBackdrop');
+	        const requestTechClose = document.getElementById('requestTechClose');
+	        const requestTechCancel = document.getElementById('requestTechCancel');
+	        const requestTechForm = document.getElementById('requestTechForm');
+	        const requestTechEmail = document.getElementById('requestTechEmail');
+	        const requestTechError = document.getElementById('requestTechError');
+	        const requestTechSuccess = document.getElementById('requestTechSuccess');
+	        let requestTechPreviouslyFocused = null;
+
+	        function openRequestTechModal() {
+	            window.__closeMobileMenu?.({ restoreFocus: false });
+	            requestTechPreviouslyFocused = document.activeElement;
+	            requestTechModal.classList.remove('hidden');
+	            document.body.classList.add('overflow-hidden');
+	            requestTechError.classList.add('hidden');
+	            requestTechSuccess.classList.add('hidden');
+	            requestTechForm.reset();
+	            setTimeout(() => requestTechEmail.focus(), 0);
+	        }
 
         function closeRequestTechModal() {
             requestTechModal.classList.add('hidden');
@@ -640,10 +702,10 @@ const translations = {
             }
         }
 
-        requestTechBtn?.addEventListener('click', openRequestTechModal);
-        requestTechBackdrop?.addEventListener('click', closeRequestTechModal);
-        requestTechClose?.addEventListener('click', closeRequestTechModal);
-        requestTechCancel?.addEventListener('click', closeRequestTechModal);
+	        requestTechBtns.forEach((btn) => btn?.addEventListener?.('click', openRequestTechModal));
+	        requestTechBackdrop?.addEventListener('click', closeRequestTechModal);
+	        requestTechClose?.addEventListener('click', closeRequestTechModal);
+	        requestTechCancel?.addEventListener('click', closeRequestTechModal);
 
         document.addEventListener('keydown', (e) => {
             if (e.key !== 'Escape') return;
@@ -665,6 +727,28 @@ const translations = {
             }
 
             requestTechSuccess.classList.remove('hidden');
+        });
+
+        // Logo: go to home page or scroll to the top "share" block when already on home
+        const siteLogo = document.getElementById('site-logo');
+        siteLogo?.addEventListener('click', (e) => {
+            const pathname = window.location.pathname || '';
+            const file = pathname.split('/').filter(Boolean).pop() || '';
+            const isHome = pathname.endsWith('/') || file === '' || file === 'index.html';
+
+            if (!isHome) return;
+
+            e.preventDefault();
+            const shareBlock = document.getElementById('share');
+            if (shareBlock) {
+                shareBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                if (window.location.hash !== '#share') {
+                    history.replaceState(null, '', '#share');
+                }
+                return;
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         // По умолчанию ставим английский
